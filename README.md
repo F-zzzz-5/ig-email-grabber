@@ -1,2 +1,3 @@
-# ig-email-grabber
-Python script that pulls an email linked to any IG account.
+# IG Email Grabber
+
+Just incase the title is slightly misleading, please read the following points which will further explain how this works and its limitations.
