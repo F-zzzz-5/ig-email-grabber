@@ -19,3 +19,8 @@ s******@outlook.com
 g********@yahoo.com
 v****@gmail.com
 ```
+
+## Requirements
+* requests
+* colorama
+* termcolor
