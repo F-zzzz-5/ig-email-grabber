@@ -9,7 +9,7 @@ Just incase the title is slightly misleading, please read the following points w
 
 ## How is this useful?
 * Assists with OSINT operations.
-* Completely anonymous assuming proxies.txt is used.
+* Completely anonymous if VPN/Proxy used. (proxy setting coming soon)
 
 ## Example Formatting
 Instagram passes back a modified version of the email, with the first letter showing with the email provider.
