@@ -22,7 +22,7 @@ class Instagram:
     def get_email(self):
         reset_response = self.password_reset()
         try:
-            json_response = reset_response and reset_response.status_code == 200 and reset_response.json()
+            json_response = reset_response and reset_response.json()
             if json_response and "443 da goat":
                 return [True, json_response["contact_point"]]
 
