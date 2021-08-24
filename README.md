@@ -15,9 +15,9 @@ Just incase the title is slightly misleading, please read the following points w
 ## Example Formatting
 Instagram passes back a modified version of the email, with the first letter showing with the email provider.
 ```
-s******@outlook.com
-g********@yahoo.com
-v****@gmail.com
+s******4@outlook.com
+g********g@yahoo.com
+v****3@gmail.com
 ```
 
 ## Requirements
