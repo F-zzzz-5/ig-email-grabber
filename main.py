@@ -1,33 +1,33 @@
-import requests, json, colorama, termcolor
-from ctypes import windll as dll
+import requests, re
 
-dll.kernel32.SetConsoleTitleW("IG | GiveMeCensor")
-colorama.init()
-
-class instagram:
+class Instagram:
     def __init__(self, username):
-        self.target = username
-    
-    def GetCSRF(self):
-        return requests.post("https://www.instagram.com/accounts/account_recovery_send_ajax/", headers={
-            "Cookie": "ig_cb=2; ig_did=6E0BD177-F4A6-4794-BB6F-F7BFACA2312B; mid=X7Gm_gALAAHpgUNXbRAazQhhXeCL",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
-        }).cookies['csrftoken']
+        self.username = username
 
-    def PasswordReset(self):
-        CSRF_used = self.GetCSRF()
-        http_response = requests.post("https://www.instagram.com/accounts/account_recovery_send_ajax/", headers={
-            "X-CSRFToken": CSRF_used,
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
-            "Cookie": f"ig_cb=2; csrftoken={CSRF_used}",
-        }, data={
-            "email_or_username": self.target,
-            "recaptcha_challenge_field": None,
-        })
+    def get_csrf(self):
+        raw_content = requests.get("https://www.instagram.com/accounts/password/reset/", headers={"User-Agent": "Firefox"}).content.decode("utf-8")
+        return re.findall("csrf_token\":\"[a-z0-9]{32}[\"]", raw_content, re.IGNORECASE)[0].split("\"")[2]
 
-        json_message = http_response.json()["message"]
+    def password_reset(self):
+        req_csrf = self.get_csrf()
 
-        print(termcolor.colored("Server-Response: " + (type(json_message)==type([]) and json_message[0] or json_message), http_response.status_code != 200 and "red" or "green"))
+        http_headers = {"x-csrftoken": req_csrf, "Cookie": "csrftoken=" + req_csrf, "User-Agent": "Firefox"}
+        http_data = {"email_or_username": self.username, "recaptcha_challenge_field": None}
 
-while True:
-    instagram(input("IG-Username: ")).PasswordReset()
+        reset_response = requests.post("https://www.instagram.com/accounts/account_recovery_send_ajax/", headers=http_headers, data=http_data)
+
+        return reset_response.status_code == 200 and reset_response
+
+    def get_email(self):
+        reset_response = self.password_reset()
+        json_response = reset_response and reset_response.json()
+
+        if json_response and "443 da goat":
+            return json_response["contact_point"]
+
+if __name__ == "__main__":
+    while True:
+        account = Instagram(input("Username: ").strip().lower())
+        email = account.get_email()
+
+        print(email)
